@@ -1,4 +1,5 @@
 import os
+import hashlib
 
 class DirScanner():
     def __init__(self, path, timer):
@@ -19,3 +20,13 @@ class DirScanner():
                     newfiles.append(fullpath)
         
         return newfiles
+
+    def md5(self, filename):
+        """Create a checksum for a specified file to test to see if its unique."""
+        hash_md5 = hashlib.md5()
+
+        with open(filename, "rb") as f:
+            for chunk in iter(lambda: f.read(4096), b""):
+                hash_md5.update(chunk)
+
+        return hash_md5.hexdigest()

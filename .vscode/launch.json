@@ -12,7 +12,7 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "Python: Main.py",
+            "name": "Python: client.py",
             "type": "python",
             "request": "launch",
             "program": "client.py",
@@ -20,6 +20,17 @@
                 "C:/Users/pjcps/Documents/pexip/test_Files"
             ],
             "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: server.py",
+            "type": "python",
+            "request": "launch",
+            "program": "server.py",
+            "args": [
+                "C:/Users/pjcps/Documents/pexip/test_Output_Files"
+            ],
+            "console": "integratedTerminal"
         }
+
     ]
 }

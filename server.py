@@ -1,21 +1,39 @@
-import os
-import http.server as server
+from http.server import HTTPServer, BaseHTTPRequestHandler
 
-class HTTPRequestHandler(server.SimpleHTTPRequestHandler):
-    """Extend SimpleHTTPRequestHandler to handle PUT requests"""
-    def do_PUT(self):
-        """Save a file following a HTTP PUT request"""
-        
-        filename = os.path.basename(self.path)
-        file_length = int(self.headers['Content-Length'])
 
-        with open(filename, 'wb') as output_file:
-            output_file.write(self.rfile.read(file_length))
-
-        self.send_response(201, 'Created')
+class S(BaseHTTPRequestHandler):
+    def _set_headers(self):
+        self.send_response(200)
+        self.send_header("Content-type", "text/html")
         self.end_headers()
-        reply_body = 'Saved "%s"\n' % filename
-        self.wfile.write(reply_body.encode('utf-8'))
 
-if __name__ == '__main__':
-    server.test(HandlerClass=HTTPRequestHandler)
+    def _html(self, message):
+        """This just generates an HTML document that includes `message`
+        in the body. Override, or re-write this do do more interesting stuff.
+        """
+        content = f"<html><body><h1>{message}</h1></body></html>"
+        return content.encode("utf8")  # NOTE: must return a bytes object!
+
+    def do_GET(self):
+        self._set_headers()
+        self.wfile.write(self._html("hi!"))
+
+    def do_HEAD(self):
+        self._set_headers()
+
+    def do_POST(self):
+        # Doesn't do anything with posted data
+        self._set_headers()
+        self.wfile.write(self._html("POST!"))
+
+
+def run(server_class=HTTPServer, handler_class=S, addr="localhost", port=8000):
+    server_address = (addr, port)
+    httpd = server_class(server_address, handler_class)
+
+    print(f"Starting httpd server on {addr}:{port}")
+    httpd.serve_forever()
+
+
+if __name__ == "__main__":
+    run()

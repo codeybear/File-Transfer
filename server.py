@@ -26,7 +26,8 @@ class S(BaseHTTPRequestHandler):
         self._set_headers()
         self.wfile.write(self._html("POST!"))
 
-    def extract_file_details(fields):
+    @classmethod
+    def extract_file_details(cls, fields):
         from os import linesep
 
         data = fields[' filename'][0]

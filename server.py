@@ -1,53 +1,46 @@
+"""
+Server receiver of the file
+"""
+import socket
 import os
-import sys
-import urllib
 
-from http.server import HTTPServer, BaseHTTPRequestHandler
+# device's IP address
+SERVER_HOST = "127.0.0.1"
+SERVER_PORT = 8000
 
-class S(BaseHTTPRequestHandler):
-    def _set_headers(self):
-        self.send_response(200)
-        self.send_header("Content-type", "text/html")
-        self.end_headers()
+# receive 4096 bytes each time
+BUFFER_SIZE = 4096
+SEPARATOR = "<SEPARATOR>"
+folder = "C:/Users/pjcps/Documents/pexip/test_Output_Files"
 
-    def _html(self, message):
-        content = f"<html><body><h1>{message}</h1></body></html>"
-        return content.encode("utf8")
+s = socket.socket()
+s.bind((SERVER_HOST, SERVER_PORT))
+# Accept up to 5 connections
+s.listen(5)
+print(f"[*] Listening as {SERVER_HOST}:{SERVER_PORT}")
+# accept connection if there is any
+client_socket, address = s.accept() 
+print(f"[+] {address} is connected.")
 
-    def do_POST(self):
-        length = int(self.headers.get('content-length'))
-        field_data = self.rfile.read(length).decode('utf-8')
-        fields = urllib.parse.parse_qs(field_data)
-        filename, filedata = S.extract_file_details(fields)
+# receive using client socket, not server socket
+received = client_socket.recv(BUFFER_SIZE) # 
+filename = received[:received.find(0)].decode()
+file_content = received[received.find(0)+1:]
 
-        with open(os.path.join(save_folder, filename), "w") as file:
-            file.write(filedata)
+# remove absolute path 
+filename = os.path.basename(filename)
+filename = os.path.join(folder, filename)
+print(f"Receiving {filename}")
 
-        self._set_headers()
-        self.wfile.write(self._html("POST!"))
+with open(filename, "wb") as f:
+    f.write(file_content)
 
-    @classmethod
-    def extract_file_details(cls, fields):
-        from os import linesep
+    while True:
+        bytes_read = client_socket.recv(BUFFER_SIZE)
+        if not bytes_read:    
+            break
+        f.write(bytes_read)
+        print(f"{len(bytes_read)}")
 
-        data = fields[' filename'][0]
-        filename = data[:data.find(linesep)].replace('"', '')
-        filedata = data[data.find(linesep * 2) + len(linesep * 2):]
-        filedata = filedata[:filedata.find("--")]
-        filedata = filedata[:filedata.rfind(linesep)]
-        filedata = filedata.replace("\r", "")
-
-        return filename, filedata
-
-
-def run(folder, server_class=HTTPServer, handler_class=S, addr="localhost", port=8000):
-    server_address = (addr, port)
-    httpd = server_class(server_address, handler_class)
-    global save_folder 
-    save_folder = folder
-
-    print(f"Starting httpd server on {addr}:{port}")
-    httpd.serve_forever()
-
-if __name__ == "__main__":
-    run(sys.argv[1])
+client_socket.close()
+s.close()

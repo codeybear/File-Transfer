@@ -1,43 +1,41 @@
-"""
-Server receiver of the file
-"""
+"""Server to recieve files sent via HTTP"""
 import socket
 import os
+import sys
+import config
 
-# device's IP address
-SERVER_HOST = "127.0.0.1"
-SERVER_PORT = 8000
-
-# receive 4096 bytes each time
-BUFFER_SIZE = 4096
-SEPARATOR = "<SEPARATOR>"
-folder = "C:/Users/pjcps/Documents/pexip/test_Output_Files"
+folder = sys.argv[1] 
 
 s = socket.socket()
-s.bind((SERVER_HOST, SERVER_PORT))
-# Accept up to 5 connections
+s.bind((config.SERVER_HOST, config.SERVER_PORT))
 s.listen(5)
-print(f"[*] Listening as {SERVER_HOST}:{SERVER_PORT}")
+print(f"[*] Listening as {config.SERVER_HOST}:{config.SERVER_PORT}")
+
+def LoadHeader():
+    # receive using client socket, not server socket
+    received = client_socket.recv(config.BUFFER_SIZE)
+    filename = received[:received.find(0)].decode()
+    file_content = received[received.find(0)+1:]
+
+    # Convert path to server folder
+    filename = os.path.basename(filename)
+    filename = os.path.join(folder, filename)
+    print(f"Receiving {filename}")
+
+    return filename, file_content
 
 while True:
     client_socket, address = s.accept() 
     print(f"[+] {address} is connected.")
 
     # receive using client socket, not server socket
-    received = client_socket.recv(BUFFER_SIZE) # 
-    filename = received[:received.find(0)].decode()
-    file_content = received[received.find(0)+1:]
-
-    # remove absolute path 
-    filename = os.path.basename(filename)
-    filename = os.path.join(folder, filename)
-    print(f"Receiving {filename}")
+    filename, file_content = LoadHeader()
 
     with open(filename, "wb") as f:
         f.write(file_content)
 
         while True:
-            bytes_read = client_socket.recv(BUFFER_SIZE)
+            bytes_read = client_socket.recv(config.BUFFER_SIZE)
             if not bytes_read:    
                 break
             f.write(bytes_read)

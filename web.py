@@ -1,27 +1,16 @@
-"""
-Client that sends the file (uploads)
-"""
 import socket
-import os
-import argparse
 
-SEPARATOR = chr(0)
-BUFFER_SIZE = 1024 * 4
-
-import requests
-
-def send_file(filename, host, port):
+def send_file(filename, host, port, buffer_size):
+    SEPARATOR = chr(0)
     s = socket.socket()
-    print(f"[+] Connecting to {host}:{port}")
-    s.connect((host, port))
-    print("[+] Connected.")
 
-    # send the filename at the start of the data
+    s.connect((host, port))
+    print("[+] Connected to {host}:{port}")
     s.send(f"{filename}{SEPARATOR}".encode())
 
     with open(filename, "rb") as f:
         while True:
-            bytes_read = f.read(BUFFER_SIZE)
+            bytes_read = f.read(buffer_size)
             if not bytes_read:
                 break
             s.sendall(bytes_read)

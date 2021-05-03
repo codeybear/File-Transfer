@@ -1,5 +1,6 @@
-import socket
 import os
+import socket
+
 
 class FileTransfer:
     def __init__(self, buffer_size) -> None:
@@ -23,7 +24,7 @@ class FileTransfer:
 
         s.close()
 
-    def load_header(self, received):
+    def _load_header(self, received):
         """Load the filename from the first section of data."""
         filename = received[:received.find(0)].decode()
         file_content = received[received.find(0)+1:]
@@ -35,7 +36,7 @@ class FileTransfer:
 
     def write_to_file(self, folder, socket):
         received = socket.recv(self._buffer_size)
-        filename, file_content = self.load_header(received)
+        filename, file_content = self._load_header(received)
         filename = os.path.join(folder, filename)
         print(f"Receiving {filename}")
 

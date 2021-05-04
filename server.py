@@ -13,8 +13,7 @@ with socket.socket() as sock:
     print(f"[*] Listening as {config.SERVER_HOST}:{config.SERVER_PORT}")
 
     while True:
-        #TODO need to make this a context manager, address is not used
-        client_socket, address = sock.accept() 
+        client_socket = sock.accept() 
         print("client is connected.")
         file_transfer = IO.FileTransfer(config.BUFFER_SIZE)
         file_transfer.write_to_file(folder, client_socket)

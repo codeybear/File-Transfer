@@ -15,8 +15,8 @@ class DirScanner():
             for file in files:
                 fullpath = os.path.join(root, file)
 
-                if fullpath not in files:
-                    self.filelist[fullpath] = ""
+                if fullpath not in self.filelist:
+                    self.filelist[fullpath] = False
                     newfiles.append(fullpath)
         
         return newfiles

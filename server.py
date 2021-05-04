@@ -5,7 +5,7 @@ import sys
 import config
 import IO
 
-folder = sys.argv[1] 
+folder = sys.argv[1]
 
 with socket.socket() as sock:
     # Listen for call from client.py
@@ -19,7 +19,7 @@ with socket.socket() as sock:
     try:
         while True:
             try:
-                client_socket, address = sock.accept() 
+                client_socket, address = sock.accept()
                 print(f"client ({address}) is connected.")
                 file_transfer = IO.FileTransfer(config.BUFFER_SIZE)
                 filename = file_transfer.write_to_file(folder, client_socket)

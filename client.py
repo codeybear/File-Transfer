@@ -20,9 +20,8 @@ while True:
             file_transfer.send_file(file, config.SERVER_HOST, config.SERVER_PORT)
             scanner.filelist[file].sent = True
             print(f"File {file} sent to server.")
-        except Exception as exc:
-            print(f"Unexpected error while sending file {file}")
-            print(f"Exception {exc}")
+        except ConnectionRefusedError:
+            print(f"Unable to contact server file not sent - {file}")
 
     try:
         time.sleep(10)

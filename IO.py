@@ -16,15 +16,16 @@ class FileTransfer:
     def send_file(self, filename, host, port):
         """Send a file over an HTTP socket."""
         sock = socket.socket()
-
         sock.connect((host, port))
         sock.send(f"{filename}{chr(SEPARATOR)}".encode())
 
         with open(filename, "rb") as f:
             while True:
                 bytes_read = f.read(self._buffer_size)
+
                 if not bytes_read:
                     break
+
                 sock.sendall(bytes_read)
 
         sock.close()

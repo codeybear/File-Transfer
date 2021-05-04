@@ -18,7 +18,7 @@ while True:
         try:
             file_transfer = IO.FileTransfer(config.BUFFER_SIZE)
             file_transfer.send_file(file, config.SERVER_HOST, config.SERVER_PORT)
-            scanner.filelist[file] = True
+            scanner.filelist[file].sent = True
             print(f"File {file} sent to server.")
         except Exception as exc:
             print(f"Unexpected error while sending file {file}")

@@ -17,7 +17,6 @@ while True:
     for file in newfiles:
         try:
             file_transfer = IO.FileTransfer(config.BUFFER_SIZE)
-            print("[+] Connecting to {host}:{port}")
             file_transfer.send_file(file, config.SERVER_HOST, config.SERVER_PORT)
             scanner.filelist[file] = True
             print(f"File {file} sent to server.")
@@ -25,4 +24,8 @@ while True:
             print(f"Unexpected error while sending file {file}")
             print(f"Exception {exc}")
 
-    time.sleep(10)
+    try:
+        time.sleep(10)
+    except KeyboardInterrupt:
+        print("Intteruped by keyboard, exiting.")
+        break

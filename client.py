@@ -1,6 +1,6 @@
-"""Command line client to send files via HTTP"""
-import time
+"""Command line client to send files via HTTP."""
 import sys
+import time
 
 import config
 import IO

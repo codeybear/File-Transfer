@@ -1,4 +1,4 @@
-"""Command line server to recieve files sent via HTTP"""
+"""Command line server to recieve files sent via HTTP."""
 import socket
 import sys
 

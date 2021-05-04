@@ -2,14 +2,16 @@
 HTTP Files Sender
 =================
 
-Command line utility to scan a folder and send files over an HTTP socket
+Command line utility to scan a folder and send files over an HTTP socket to a server.
 
-Requires Python 3.6 or above, only built in libraries are used.
+Requires Python 3.6 or above, only built in libraries are used so no need to install any packages.
 
 Run the client:  
-python client.py "{folderpath}"
+python client.py "{sourcefolderpath}"
 
 Run the server:  
-python server.py "{folderpath}"
+python server.py "{destinationfolderpath}"
 
-Edit the config.py file to setup configuration of HTTP address, PORT and buffer size which relates to the size of file chunks to transfer.
+Edit the config.py file to setup configuration of server HTTP address, PORT and buffer size which relates to the size of file chunks to transfer.
+
+Both programs need to be cancelled with a keyboard interrupt i.e. CTRL+C on both Windows and Linux.

@@ -27,5 +27,5 @@ while True:
     try:
         time.sleep(10)
     except KeyboardInterrupt:
-        print("Intteruped by keyboard, exiting.")
+        print("Interupted by keyboard, exiting.")
         break

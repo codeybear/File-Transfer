@@ -11,6 +11,8 @@ with socket.socket() as sock:
     # Listen for call from client.py
     sock.bind((config.SERVER_HOST, config.SERVER_PORT))
     print(f"[*] Listening as {config.SERVER_HOST}:{config.SERVER_PORT}")
+
+    # The socket needs a timeout to allow for keyboard interrupt
     sock.settimeout(1)
     sock.listen(5)
 
@@ -24,6 +26,6 @@ with socket.socket() as sock:
                 print(f"Stored new file - {filename}")
                 client_socket.close()
             except socket.timeout:
-                print("Waiting...")
+                pass
     except KeyboardInterrupt:
         print('Keyboard interrupt stopping...')

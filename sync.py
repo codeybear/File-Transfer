@@ -1,4 +1,4 @@
-"""Scan a folder for new files"""
+"""Scan a folder for new/unsent files"""
 import hashlib
 import os
 from collections import defaultdict

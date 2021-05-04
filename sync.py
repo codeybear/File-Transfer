@@ -35,6 +35,7 @@ class DirScanner():
                 # check to see if a file has not been sent or has changed, if so send again
                 if self.filelist[fullpath].sent is False or self.filelist[fullpath].checksum != checksum:
                     newfiles.append(fullpath)
+                    self.filelist[fullpath].checksum = checksum
 
         return newfiles
 

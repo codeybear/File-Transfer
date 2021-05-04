@@ -1,5 +1,5 @@
 
-HTTP Files Sender
+HTTP File Sender
 =================
 
 Command line utility to scan a folder and send files via HTTP to a server.

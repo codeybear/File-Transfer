@@ -10,14 +10,21 @@ folder = sys.argv[1]
 with socket.socket() as sock:
     # Listen for call from client.py
     sock.bind((config.SERVER_HOST, config.SERVER_PORT))
-    sock.listen(5)
     print(f"[*] Listening as {config.SERVER_HOST}:{config.SERVER_PORT}")
+    sock.settimeout(1)
+    sock.listen(5)
 
-    # Repeat until keyboard interrupt to quit
     while True:
-        client_socket, _ = sock.accept() 
-        print("client is connected.")
-        file_transfer = IO.FileTransfer(config.BUFFER_SIZE)
-        filename = file_transfer.write_to_file(folder, client_socket)
-        print(f"Stored new file - {filename}")
-        client_socket.close()
+        try:
+            client_socket, address = sock.accept() 
+            print(f"client ({address}) is connected.")
+            file_transfer = IO.FileTransfer(config.BUFFER_SIZE)
+            filename = file_transfer.write_to_file(folder, client_socket)
+            print(f"Stored new file - {filename}")
+            client_socket.close()
+        except socket.timeout:
+            try:
+                print("Waiting...")
+            except KeyboardInterrupt:
+                print("Interupted by keyboard, stopping")
+                break

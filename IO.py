@@ -1,6 +1,12 @@
-"""Send and receive files using HTTP sockets"""
+"""Send and receive files using HTTP sockets.
+
+File is sent in the format Filename[null character]File Content
+so that the filename can be preserved.
+"""
 import os
 import socket
+
+SEPARATOR = 0
 
 
 class FileTransfer:
@@ -9,11 +15,10 @@ class FileTransfer:
 
     def send_file(self, filename, host, port):
         """Send a file over an HTTP socket."""
-        SEPARATOR = chr(0)
         s = socket.socket()
 
         s.connect((host, port))
-        s.send(f"{filename}{SEPARATOR}".encode())
+        s.send(f"{filename}{chr(SEPARATOR)}".encode())
 
         with open(filename, "rb") as f:
             while True:
@@ -26,8 +31,8 @@ class FileTransfer:
 
     def _load_header(self, received):
         """Load the filename from the first section of data."""
-        filename = received[:received.find(0)].decode()
-        file_content = received[received.find(0)+1:]
+        filename = received[:received.find(SEPARATOR)].decode()
+        file_content = received[received.find(SEPARATOR)+1:]
 
         # Convert path to server folder
         filename = os.path.basename(filename)

@@ -17,7 +17,7 @@
             "request": "launch",
             "program": "client.py",
             "args": [
-                "C:/Users/pjcps/Documents/pexip/test_Files"
+                "${workspaceFolder}/test_Files"
             ],
             "console": "integratedTerminal"
         },
@@ -27,7 +27,7 @@
             "request": "launch",
             "program": "server.py",
             "args": [
-                "C:/Users/pjcps/Documents/pexip/test_Output_Files"
+                "${workspaceFolder}/test_Output_Files"
             ],
             "console": "integratedTerminal"
         }

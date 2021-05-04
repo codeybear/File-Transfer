@@ -6,11 +6,11 @@ Command line utility to scan a folder and send files via HTTP to a server.
 
 Requires Python 3.6 or above, only built in libraries are used so no need to install any packages.
 
+To run the server:  
+python server.py "{destinationfolderpath}"
+
 Run the client:  
 python client.py "{sourcefolderpath}"
-
-Run the server:  
-python server.py "{destinationfolderpath}"
 
 Edit the config.py file to setup configuration of server HTTP address, port and buffer size which relates to the size of file chunks to transfer.
 
